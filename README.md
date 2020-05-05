@@ -1,5 +1,7 @@
 AdMob
 =====
+### This version is deprecated, please use the recent [VERSION](https://github.com/kloder-games/godot-admob)
+
 This is the AdMob module for Godot Engine (https://github.com/okamstudio/godot)
 - Android & iOS
 - Banner
