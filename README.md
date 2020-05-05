@@ -49,6 +49,7 @@ If you have more separate by comma.
 
 ### iOS
 Follow the [exporting to iOS official documentation](http://docs.godotengine.org/en/2.1/learning/workflow/export/exporting_for_ios.html).
+
 Just make sure you're using your custom template (compiled in the previous step), for that  rename it to "godot_opt.iphone" and replace the file with same name inside the Xcode project.
 
 
