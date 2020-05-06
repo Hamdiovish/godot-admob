@@ -22,7 +22,7 @@ For that, do the following steps:
 - Recompile the android export template following the [official instructions](http://docs.godotengine.org/en/3.1/reference/compiling_for_android.html#compiling-export-templates).
 
 #### Using precompiled templates (Second Option)
-If you don't want or can't build the template by yourself, you can find a precompiled template with this module [here](https://github.com/kloder-games/godot-admob/tree/3.1.X/templates/android). Go to the release tab and download the zip file.
+If you don't want or can't build the template by yourself, you can find a precompiled template with this module [here](https://github.com/kloder-games/godot-admob/tree/3.1.X/templates/android).
 
 #### Export configuration
 - In your project goto Export > Target > Android:
@@ -33,9 +33,15 @@ If you don't want or can't build the template by yourself, you can find a precom
 			- Access Network State
 			- Internet
 ### iOS
+To use this module you'll need a custom template for iOS. You can build it by yourself or download a precompiled one.
+
+#### Compiling the template (First Option)
 - Drop the "admob" directory inside the "modules" directory on the Godot source;
-- Download and extract the [Google Mobile Ads SDK](https://developers.google.com/admob/ios/download) **(<= 7.41.0)** inside the directory "admob/ios/lib"; (If you are unable to download the version informed above, you can alternatively download it through [Cocoapods](https://cocoapods.org/#install) or [HERE](https://srv-file6.gofile.io/download/iLaAUS/GoogleMobileAds_framework_7_41_0.zip))
+- Download and extract the [Google Mobile Ads SDK](https://developers.google.com/admob/ios/download) **(recommended 7.58.0)** inside the directory "admob/ios/lib"; (If you are unable to download the version informed above, you can alternatively download it through [Cocoapods](https://cocoapods.org/#install) or [HERE](https://srv-file12.gofile.io/download/5qrR3L/GoogleMobileAdsSdkiOS-7.58.0.zip)
 - [Recompile the iOS export template](http://docs.godotengine.org/en/3.1/development/compiling/compiling_for_ios.html). (If you get some error, check this [issue](https://github.com/kloder-games/godot-admob/issues/87))
+
+#### Using precompiled templates (Second Option)
+If you don't want or can't build the template by yourself, you can find a precompiled template with this module [here](https://github.com/kloder-games/godot-admob/tree/3.1.X/templates/ios).
 
 Configuring your game
 ---------------------
@@ -53,8 +59,11 @@ Follow the [exporting to iOS official documentation](http://docs.godotengine.org
 
 - Export your project from Godot, it'll create an Xcode project;
 - Copy the library (.a) you have compiled following the official documentation inside the exported Xcode project. You must override the 'your_project_name.a' file with this file.
-- Copy the GoogleMobileAds.framework inside the exported Xcode project folder and link it using the "Link Binary with Libraries" option;
-- Add the following frameworks to the project:
+- Add the following frameworks to the project linking it using the "Link Binary with Libraries" option:
+	- GoogleAppMeasurement.framework (from GoogleMobileAdsSdkiOS)
+	- GoogleMobileAds.framework (from GoogleMobileAdsSdkiOS)
+	- GoogleUtilities.xcframework (from GoogleMobileAdsSdkiOS)
+	- nanopb.xcframework (from GoogleMobileAdsSdkiOS)
 	- StoreKit
 	- GameKit
 	- CoreVideo
@@ -66,7 +75,9 @@ Follow the [exporting to iOS official documentation](http://docs.godotengine.org
 	- SQLite (libsqlite3.0.tbd)
 - Add the -ObjC linker flag to Other Linker Flags in your project's build settings:
 ![-ObjC](https://developers.google.com/admob/images/ios/objc_linker_flag.png)
+
 - Update your GAMENAME-Info.plist file, add a GADApplicationIdentifier key with a string value of your [AdMob app ID](https://support.google.com/admob/answer/7356431):
+
 ![plist](https://i.imgur.com/1tcKXx5.png)
 
 
@@ -180,7 +191,7 @@ _on_rewarded_video_started()
 
 Known Issues
 --------------
-* You can't use Rewarded Video and any other ad type (Banner and/or Interstitial) at same time on iOS or your app will crash with the error ```Multiple locks on web thread not allowed``` when the Reward is closed. To fix this, we need help from an iOS developer as I don't have any Apple hardware to do it by myself. You can see more details about this issue [here](https://github.com/kloder-games/godot-admob/issues/53). You can find a workaround for this issue [here](https://github.com/kloder-games/godot-admob/issues/53#issuecomment-501540139).
+* The error ```Multiple locks on web thread not allowed``` is fixed, if you are still facing this error, write a comment about this issue [HERE](https://github.com/kloder-games/godot-admob/issues/53).
 
 
 Troubleshooting
