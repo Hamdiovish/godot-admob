@@ -3,9 +3,10 @@ def can_build(env, platform):
 
 def configure(env):
 	if (env['platform'] == 'android'):
-		env.android_add_dependency("compile ('com.google.android.gms:play-services-ads:16.0.0') { exclude group: 'com.android.support' }")
+		env.android_add_dependency("compile ('com.google.android.gms:play-services-ads:17.2.1') { exclude group: 'com.android.support' }")
+		
 		env.android_add_java_dir("android")
-		env.android_add_to_manifest("android/AndroidManifestChunk.xml")
+		env.android_add_to_manifest("android/AndroidManifest.xml")
 		env.disable_module()
             
 	if env['platform'] == "iphone":
