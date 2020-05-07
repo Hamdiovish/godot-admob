@@ -22,6 +22,8 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+import com.google.android.gms.ads.rewarded.RewardedAdCallback;
+import com.google.android.gms.ads.rewarded.RewardItem;
 
 public class GodotAdMob extends Godot.SingletonBase
 {
@@ -128,25 +130,23 @@ public class GodotAdMob extends Godot.SingletonBase
 		{
 			@Override public void run()
 			{
-				if (rewardedAd == null) {
-					rewardedAd = new RewardedAd(activity, id);
-					RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() 
-					{
-			            @Override
-			            public void onRewardedAdLoaded() {
-							Log.w("godot", "AdMob: onRewardedAdLoaded");
-							GodotLib.calldeferred(instance_id, "_on_rewarded_ad_loaded", new Object[] { });
-			            }
+				rewardedAd = new RewardedAd(activity, id);
+				RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() 
+				{
+		            @Override
+		            public void onRewardedAdLoaded() {
+						Log.w("godot", "AdMob: onRewardedAdLoaded");
+						GodotLib.calldeferred(instance_id, "_on_rewarded_ad_loaded", new Object[] { });
+		            }
 
-			           @Override
-			            public void onRewardedAdFailedToLoad(int errorCode) {
-							Log.w("godot", "AdMob: onRewardedAdFailedToLoad. errorCode: " + errorCode);
-							GodotLib.calldeferred(instance_id, "_on_rewarded_ad_failed_to_load", new Object[] { errorCode });
-			            }
-			        };
-					rewardedAd.loadAd(getAdRequest(), adLoadCallback);
+		           @Override
+		            public void onRewardedAdFailedToLoad(int errorCode) {
+						Log.w("godot", "AdMob: onRewardedAdFailedToLoad. errorCode: " + errorCode);
+						GodotLib.calldeferred(instance_id, "_on_rewarded_ad_failed_to_load", new Object[] { errorCode });
+		            }
+		        };
+				rewardedAd.loadAd(getAdRequest(), adLoadCallback);
 
-				}
 			}
 		});
 	}
@@ -159,7 +159,34 @@ public class GodotAdMob extends Godot.SingletonBase
 		{
 			@Override public void run()
 			{
-				if (rewardedAd.isLoaded()) {
+				if (rewardedAd.isLoaded()) 
+				{
+					RewardedAdCallback adCallback = new RewardedAdCallback() 
+					{
+		                @Override
+		                public void onRewardedAdOpened() {
+							Log.w("godot", "AdMob: onRewardedAdOpened");
+							GodotLib.calldeferred(instance_id, "_on_rewarded_ad_opened", new Object[] { });
+		                }
+
+		                @Override
+		                public void onRewardedAdClosed() {
+		                	Log.w("godot", "AdMob: onRewardedAdClosed");
+							GodotLib.calldeferred(instance_id, "_on_rewarded_ad_closed", new Object[] { });
+		                }
+
+		                @Override
+		                public void onUserEarnedReward(RewardItem reward) {
+							Log.w("godot", "AdMob: " + String.format(" onRewarded! currency: %s amount: %d", reward.getType(), reward.getAmount()));
+							GodotLib.calldeferred(instance_id, "_on_rewarded", new Object[] { reward.getType(), reward.getAmount() });
+		                }
+
+		                @Override
+		                public void onRewardedAdFailedToShow(int errorCode) {
+		                }
+		            };
+	            rewardedAd.show(activity, adCallback);
+ 
 				}
 			}
 		});
