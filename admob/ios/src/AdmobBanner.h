@@ -10,12 +10,11 @@
     bool initialized;
     bool isReal;
     bool isOnTop;
-    int instanceId;
     NSString *adUnitId;
     ViewController *rootController;
 }
 
-- (void)initialize:(GodotAdmob*)delegate_ptr :(BOOL)is_real: (int)instance_id;
+- (void)initialize:(GodotAdmob*)delegate_ptr :(BOOL)is_real;
 - (void)loadBanner:(NSString*)bannerId :(BOOL)is_on_top;
 - (void)showBanner;
 - (void)hideBanner;

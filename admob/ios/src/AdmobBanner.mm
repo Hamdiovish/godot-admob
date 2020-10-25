@@ -9,11 +9,10 @@
     [super dealloc];
 }
 
-- (void)initialize:(GodotAdmob*)delegate_ptr: (BOOL)is_real: (int)instance_id {
+- (void)initialize:(GodotAdmob*)delegate_ptr: (BOOL)is_real {
     delegate = delegate_ptr;
     isReal = is_real;
     initialized = true;
-    instanceId = instance_id;
     rootController = [AppDelegate getViewController];
 }
 
@@ -200,7 +199,6 @@
 /// Tells the delegate an ad request loaded an ad.
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
     NSLog(@"adViewDidReceiveAd");
-    Object *obj = ObjectDB::get_instance(instanceId);
     delegate->emit_signal("admob_admob_ad_loaded");
 }
 
@@ -208,7 +206,6 @@
 - (void)adView:(GADBannerView *)adView
 didFailToReceiveAdWithError:(GADRequestError *)error {
     NSLog(@"adView:didFailToReceiveAdWithError: %@", [error localizedDescription]);
-    Object *obj = ObjectDB::get_instance(instanceId);
     delegate->emit_signal("admob_admob_network_error");
 }
 

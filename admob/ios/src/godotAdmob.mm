@@ -32,7 +32,7 @@ GodotAdmob::~GodotAdmob() {
    }
 }
 
-void GodotAdmob::init(bool isReal, int instanceId) {
+void GodotAdmob::init(bool isReal) {
     if (instance != this) {
         NSLog(@"GodotAdmob Module dublicate singleton");
         return;
@@ -42,21 +42,19 @@ void GodotAdmob::init(bool isReal, int instanceId) {
         return;
     }
     
-    NSLog(@"instanceId: %i", instanceId);
-
     initialized = true;
     
     banner = [[AdmobBanner alloc] init];
-    [banner initialize :instance :isReal :instanceId];
+    [banner initialize :instance :isReal];
     
     interstitial = [[AdmobInterstitial alloc] init];
-    [interstitial initialize :instance :isReal :instanceId];
+    [interstitial initialize :instance :isReal];
     
     rewarded = [[AdmobRewarded alloc] init];
-    [rewarded initialize :instance :isReal :instanceId];
+    [rewarded initialize :instance :isReal];
 }
 
-void GodotAdmob::initWithContentRating(bool isReal, int instanceId, bool child_directed, bool is_personalized, const String &max_ad_content_rate) {
+void GodotAdmob::initWithContentRating(bool isReal, bool child_directed, bool is_personalized, const String &max_ad_content_rate) {
     if (instance != this) {
         NSLog(@"GodotAdmob Module dublicate singleton");
         return;
@@ -69,13 +67,13 @@ void GodotAdmob::initWithContentRating(bool isReal, int instanceId, bool child_d
     initialized = true;
     
     banner = [[AdmobBanner alloc] init];
-    [banner initialize :instance :isReal :instanceId];
+    [banner initialize :instance :isReal];
     
     interstitial = [[AdmobInterstitial alloc] init];
-    [interstitial initialize :instance :isReal :instanceId :banner];
+    [interstitial initialize :instance :isReal :banner];
     
     rewarded = [[AdmobRewarded alloc] init];
-    [rewarded initialize :instance :isReal :instanceId :banner];
+    [rewarded initialize :instance :isReal :banner];
 }
 
 void GodotAdmob::loadBanner(const String &bannerId, bool isOnTop) {

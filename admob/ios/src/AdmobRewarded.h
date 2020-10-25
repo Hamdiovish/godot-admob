@@ -7,11 +7,10 @@
     GodotAdmob *delegate;
     bool initialized;
     bool isReal;
-    int instanceId;
     ViewController *rootController;
 }
 
-- (void)initialize:(GodotAdmob*)delegate_ptr :(BOOL)is_real: (int)instance_id;
+- (void)initialize:(GodotAdmob*)delegate_ptr :(BOOL)is_real;
 - (void)loadRewardedVideo:(NSString*)rewardedId;
 - (void)showRewardedVideo;
 

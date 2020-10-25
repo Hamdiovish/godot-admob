@@ -10,11 +10,10 @@
     [super dealloc];
 }
 
-- (void)initialize:(GodotAdmob*)delegate_ptr: (BOOL)is_real: (int)instance_id {
+- (void)initialize:(GodotAdmob*)delegate_ptr: (BOOL)is_real {
     delegate = delegate_ptr;
     isReal = is_real;
     initialized = true;
-    instanceId = instance_id;
     rootController = [AppDelegate getViewController];
 }
 
@@ -65,7 +64,6 @@
 /// Tells the delegate an ad request succeeded.
 - (void)interstitialDidReceiveAd:(GADInterstitial *)ad {
     NSLog(@"interstitialDidReceiveAd");
-    Object *obj = ObjectDB::get_instance(instanceId);
     delegate->emit_signal("admob_interstitial_loaded");
 }
 
@@ -73,7 +71,6 @@
 - (void)interstitial:(GADInterstitial *)ad
 didFailToReceiveAdWithError:(GADRequestError *)error {
     NSLog(@"interstitial:didFailToReceiveAdWithError: %@", [error localizedDescription]);
-    Object *obj = ObjectDB::get_instance(instanceId);
     delegate->emit_signal("admob_interstitial_not_loaded");
 }
 
@@ -90,7 +87,6 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
 /// Tells the delegate the interstitial had been animated off the screen.
 - (void)interstitialDidDismissScreen:(GADInterstitial *)ad {
     NSLog(@"interstitialDidDismissScreen");
-    Object *obj = ObjectDB::get_instance(instanceId);
     delegate->emit_signal("admob_interstitial_close");
  
 }
