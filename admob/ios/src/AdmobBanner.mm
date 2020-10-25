@@ -9,7 +9,8 @@
     [super dealloc];
 }
 
-- (void)initialize:(BOOL)is_real: (int)instance_id {
+- (void)initialize:(GodotAdmob*)delegate_ptr: (BOOL)is_real: (int)instance_id {
+    delegate = delegate_ptr;
     isReal = is_real;
     initialized = true;
     instanceId = instance_id;
@@ -200,7 +201,7 @@
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
     NSLog(@"adViewDidReceiveAd");
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_admob_ad_loaded");
+    delegate->emit_signal("admob_admob_ad_loaded");
 }
 
 /// Tells the delegate an ad request failed.
@@ -208,7 +209,7 @@
 didFailToReceiveAdWithError:(GADRequestError *)error {
     NSLog(@"adView:didFailToReceiveAdWithError: %@", [error localizedDescription]);
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_admob_network_error");
+    delegate->emit_signal("admob_admob_network_error");
 }
 
 /// Tells the delegate that a full screen view will be presented in response

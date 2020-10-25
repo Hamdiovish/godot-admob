@@ -10,11 +10,11 @@
     [super dealloc];
 }
 
-- (void)initialize:(BOOL)is_real: (int)instance_id: (AdmobBanner *)admob_banner {
+- (void)initialize:(GodotAdmob*)delegate_ptr: (BOOL)is_real: (int)instance_id {
+    delegate = delegate_ptr;
     isReal = is_real;
     initialized = true;
     instanceId = instance_id;
-    admobBanner = admob_banner;
     rootController = [AppDelegate getViewController];
 }
 
@@ -52,7 +52,6 @@
     }
     
     if (interstitial.isReady) {
-        [admobBanner disableBanner];
         [interstitial presentFromRootViewController:rootController];
     } else {
         NSLog(@"Interstitial Ad wasn't ready");
@@ -67,7 +66,7 @@
 - (void)interstitialDidReceiveAd:(GADInterstitial *)ad {
     NSLog(@"interstitialDidReceiveAd");
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_interstitial_loaded");
+    delegate->emit_signal("admob_interstitial_loaded");
 }
 
 /// Tells the delegate an ad request failed.
@@ -75,7 +74,7 @@
 didFailToReceiveAdWithError:(GADRequestError *)error {
     NSLog(@"interstitial:didFailToReceiveAdWithError: %@", [error localizedDescription]);
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_interstitial_not_loaded");
+    delegate->emit_signal("admob_interstitial_not_loaded");
 }
 
 /// Tells the delegate that an interstitial will be presented.
@@ -86,18 +85,13 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
 /// Tells the delegate the interstitial is to be animated off the screen.
 - (void)interstitialWillDismissScreen:(GADInterstitial *)ad {
     NSLog(@"interstitialWillDismissScreen");
-    [self performSelector:@selector(bannerEnable) withObject:nil afterDelay:BANNER_ENABLE_DELAY];
-}
-- (void)bannerEnable{
-    NSLog(@"banner enable call");
-    [admobBanner enableBanner];
 }
 
 /// Tells the delegate the interstitial had been animated off the screen.
 - (void)interstitialDidDismissScreen:(GADInterstitial *)ad {
     NSLog(@"interstitialDidDismissScreen");
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_interstitial_close");
+    delegate->emit_signal("admob_interstitial_close");
  
 }
 

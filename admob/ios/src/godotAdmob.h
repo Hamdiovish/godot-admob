@@ -4,6 +4,7 @@
 #include <version_generated.gen.h>
 
 #include "reference.h"
+#include "object.h"
 
 
 #ifdef __OBJC__
@@ -21,12 +22,12 @@ typedef void *rewardedPtr;
 
 
 
-class GodotAdmob : public Reference {
+class GodotAdmob : public Object {
     
 #if VERSION_MAJOR == 3
-    GDCLASS(GodotAdmob, Reference);
+    GDCLASS(GodotAdmob, Object);
 #else
-    OBJ_TYPE(GodotAdmob, Reference);
+    OBJ_TYPE(GodotAdmob, Object);
 #endif
 
     bool initialized;
@@ -47,6 +48,8 @@ public:
     void loadBanner(const String &bannerId, bool isOnTop);
     void showBanner();
     void hideBanner();
+    void enableBanner();
+    void disableBanner();
     void resize();
     int getBannerWidth();
     int getBannerHeight();

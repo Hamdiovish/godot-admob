@@ -1,9 +1,9 @@
 #import <GoogleMobileAds/GADInterstitial.h>
 #import "app_delegate.h"
-#import "AdmobBanner.h"
+#include "godotAdmob.h"
 
 @interface AdmobInterstitial: NSObject <GADInterstitialDelegate> {
-    AdmobBanner *admobBanner;
+    GodotAdmob *delegate;
     GADInterstitial *interstitial;
     bool initialized;
     bool isReal;
@@ -11,7 +11,7 @@
     ViewController *rootController;
 }
 
-- (void)initialize:(BOOL)is_real: (int)instance_id: (AdmobBanner *)banner;
+- (void)initialize:(GodotAdmob*)delegate_ptr :(BOOL)is_real: (int)instance_id;
 - (void)loadInterstitial:(NSString*)interstitialId;
 - (void)showInterstitial;
 

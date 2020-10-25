@@ -3,15 +3,14 @@
 #import <GoogleMobileAds/GADAdReward.h>
 #include "reference.h"
 
-
 @implementation AdmobRewarded
 
 
-- (void)initialize:(BOOL)is_real: (int)instance_id: (AdmobBanner *)admob_banner {
+- (void)initialize:(GodotAdmob*)delegate_ptr: (BOOL)is_real: (int)instance_id {
+    delegate = delegate_ptr;
     isReal = is_real;
     initialized = true;
     instanceId = instance_id;
-    admobBanner = admob_banner;
     rootController = [AppDelegate getViewController];
 }
 
@@ -43,7 +42,6 @@
     }
     
     if ([[GADRewardBasedVideoAd sharedInstance] isReady]) {
-        [admobBanner disableBanner];
         [[GADRewardBasedVideoAd sharedInstance] presentFromRootViewController:rootController];
     }
     
@@ -54,58 +52,54 @@
     NSString *rewardMessage = [NSString stringWithFormat:@"Reward received with currency %@ , amount %lf",
                                 reward.type, [reward.amount doubleValue]];
     NSLog(rewardMessage);
-                                        
-    Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_rewarded", [reward.type UTF8String], reward.amount.doubleValue);
+
+    NSLog(@"instanceId: %i", instanceId);
+
+    delegate->emit_signal("admob_demo");
+    delegate->emit_signal("admob_rewarded", [reward.type UTF8String], reward.amount.doubleValue);
                                         
 }
          
 - (void)rewardBasedVideoAdDidReceiveAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
     NSLog(@"Reward based video ad is received.");
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_rewarded_video_ad_loaded");
+    delegate->emit_signal("admob_rewarded_video_ad_loaded");
 }
          
 - (void)rewardBasedVideoAdDidOpen:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
     NSLog(@"Opened reward based video ad.");
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_rewarded_video_ad_opened");
+    delegate->emit_signal("admob_rewarded_video_ad_opened");
 }
          
 - (void)rewardBasedVideoAdDidStartPlaying:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
     NSLog(@"Reward based video ad started playing.");
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_rewarded_video_started");
+    delegate->emit_signal("admob_rewarded_video_started");
 }
          
 - (void)rewardBasedVideoAdDidClose:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
     NSLog(@"Reward based video ad is closed.");
-    NSLog(@"Enable Banner with delay:%d",BANNER_ENABLE_DELAY);
-    [self performSelector:@selector(bannerEnable) withObject:nil afterDelay:BANNER_ENABLE_DELAY];
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_rewarded_video_ad_closed");
-}
-- (void)bannerEnable{
-    NSLog(@"banner enable call");
-    [admobBanner enableBanner];
+    delegate->emit_signal("admob_rewarded_video_ad_closed");
 }
          
 - (void)rewardBasedVideoAdWillLeaveApplication:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
     NSLog(@"Reward based video ad will leave application.");
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_rewarded_video_ad_left_application");
+    delegate->emit_signal("admob_rewarded_video_ad_left_application");
 }
          
 - (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd didFailToLoadWithError:(NSError *)error {
     NSLog(@"Reward based video ad failed to load: %@ ", error.localizedDescription);
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_rewarded_video_ad_failed_to_load", (int)error.code);
+    delegate->emit_signal("admob_rewarded_video_ad_failed_to_load", (int)error.code);
 }
 
 - (void)rewardBasedVideoAdDidCompletePlaying:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
     NSLog(@"Reward based video ad has completed.");
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_rewarded_video_completed");
+    delegate->emit_signal("admob_rewarded_video_completed");
 }
 
 
