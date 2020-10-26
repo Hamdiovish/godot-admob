@@ -1,6 +1,12 @@
 #include "godotAdmob.h"
 #import "app_delegate.h"
 
+//import from linked the framework
+#import "AdMob/AdMob-Swift.h"
+
+//import existing header
+#import "AdMobO.h"
+
 #if VERSION_MAJOR == 3
 #define CLASS_DB ClassDB
 #else
@@ -52,6 +58,17 @@ void GodotAdmob::init(bool isReal) {
     
     rewarded = [[AdmobRewarded alloc] init];
     [rewarded initialize :instance :isReal];
+    
+    //Testing Framework
+    NSLog(@">>Swift Framework Call:");
+    Alphin * alp = [[Alphin alloc] init];
+    [alp printSomeWithData :@"yeppi!"];
+
+    //Testing ObjC Static Library
+    NSLog(@">>Swift Static Library Call:");
+    [AdMobO alpha];
+    [AdMobO beta];
+
 }
 
 void GodotAdmob::initWithContentRating(bool isReal, bool child_directed, bool is_personalized, const String &max_ad_content_rate) {
